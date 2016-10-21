@@ -1,0 +1,43 @@
+diff --git a/trunk/src/DttSP/fm_demod.c b/trunk/src/DttSP/fm_demod.c
+index 9d61575..b228673 100644
+--- a/trunk/src/DttSP/fm_demod.c
++++ b/trunk/src/DttSP/fm_demod.c
+@@ -113,7 +113,8 @@ newFMD (REAL samprate,
+ 
+ 	fm->lock = 0.5;
+ 	fm->afc = 0.0;
+-	fm->cvt = (REAL) (0.45 * samprate / (M_PI * f_bandwid));
++	//fm->cvt = (REAL) (0.45 * samprate / (M_PI * f_bandwid));
++        fm->cvt = (REAL) (4.5 * samprate / (M_PI * f_bandwid));
+ 
+ 	return fm;
+ }
+
+diff --git a/trunk/src/dspserver/soundcard.c b/trunk/src/dspserver/soundcard.c
+index c47da96..647e2d2 100644
+--- a/trunk/src/dspserver/soundcard.c
++++ b/trunk/src/dspserver/soundcard.c
+@@ -80,8 +80,8 @@ fprintf(stderr,"setSoundcard: %d\n",card);
+         case SDR_IQ:
+             //multimeterCalibrationOffset=-240.0f - 25.0f;
+             //displayCalibrationOffset=-18.0f;
+-            multimeterCalibrationOffset=-240.0f - 25.0f;
+-            displayCalibrationOffset=-240.0f - 18.0f;
++            multimeterCalibrationOffset=-240.0f - 0.0f; //-240.0f - 25.0f
++            displayCalibrationOffset=-240.0f - 18.0f;   //-240.0f - 18.0f
+             break;
+         case U7_KX3:
+             // G0HWW's figs - XG3 @ -73dBm for S9
+diff --git a/trunk/src/sdriq/receiver.c b/trunk/src/sdriq/receiver.c
+index 27aa9f3..9f3fd9a 100644
+--- a/trunk/src/sdriq/receiver.c
++++ b/trunk/src/sdriq/receiver.c
+@@ -97,7 +97,7 @@ const char* attach_receiver(int rx, CLIENT* client)
+     //    return RECEIVER_INVALID;
+     //}
+ 
+-    gain_sdriq (0, -20);
++    gain_sdriq (0, 0); //-20
+     //gain_sdriq (1, 1);
+ 
+     freq_sdriq (7050000);
