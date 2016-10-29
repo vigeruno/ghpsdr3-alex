@@ -86,14 +86,13 @@ pll (FMD fm, COMPLEX sig)
 void
 FMDemod (FMD fm)
 {
-	int i,mute;
-	for (i = 0; i < CXBsize (fm->ibuf); i++)
-	{
+int i,mute;
+	for (i = 0; i < CXBsize (fm->ibuf); i++) { 
 		pll (fm, CXBdata (fm->ibuf, i));
 		fm->afc = (REAL) (0.9999 * fm->afc + 0.0001 * fm->pll.freq.f);
-		if (fm->afc < 0.000001){ mute = 0; } else { mute = 1; }
+		if (fm->afc < 0.000001){ mute = 1; } else { mute = 0; } 
 		CXBreal (fm->obuf, i) =
-			CXBimag (fm->obuf, i) = (fm->pll.freq.f - fm->afc) * fm->cvt * mute;
+CXBimag (fm->obuf, i) = mute? 0: ((fm->pll.freq.f - fm->afc) * fm->cvt);
 	}
 }
 
